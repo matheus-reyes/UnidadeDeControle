@@ -1,0 +1,5 @@
+.text
+
+li $s1, 10
+li $s2, 20
+add $s3, $s1, $s2
