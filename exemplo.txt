@@ -1,5 +1,8 @@
 .text
 
 li $s1, 10
-li $s2, 20
+li $s2, 10
+move $s5, $s1
+bne $s1, $s2, 7
 add $s3, $s1, $s2
+sub $s4, $s2, $s1

@@ -8,17 +8,18 @@ public class UC{
     final static int OPCODES1 = 1, OPCODES2 = 2, OPCODES3 = 3, OPCODES4 = 4, OPCODES5 = 5;
     
     //Instruções MIPS e seus opcodes
-    final static int OPCODELI = 1, OPCODELW = 2, OPCODESW = 3, OPCODEMOV = 4, OPCODEADD = 5, 
+    final static int OPCODELI = 1, OPCODELW = 2, OPCODESW = 3, OPCODEMOVE = 4, OPCODEADD = 5, 
     OPCODESUB = 6, OPCODEBEQ = 7, OPCODEBNE = 8, OPCODEJ = 9, OPCODESLT = 10;
 
     static LinkedList<Memoria> memoria = new LinkedList<Memoria>();
+
+    static String s1 = "", s2 = "", s3 = "", s4 = "", s5 = "";
 
     public static void main(String[] args) throws IOException {
         BufferedReader inputStream = null;
 
         //Registradores
-        int s1, s2, s3, s4, s5;
-        
+       
         try {
             
             //Recebe o arquivo de entrada
@@ -50,18 +51,56 @@ public class UC{
         } 
 
         //Percorre a lista de memórias
-        for(Memoria memorias: memoria){
-            // System.out.println("Endereço: " + memorias.getEndereco());
-            // System.out.println("Conteúdo: " + memorias.getConteudo());
-            //Ignora linhas vazias
-            if(!memorias.getConteudo().equals("")){
+        for(int i = 0; i < memoria.size(); i++){
 
-                //Se o opcode for igual ao opcode de add
-                if(memorias.getConteudo().substring(0, 4).equals("0101")){
-                    System.out.println(add());
+            //Ignora linhas vazias
+            if(!memoria.get(i).getConteudo().equals("")){
+
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de li
+                if(memoria.get(i).getConteudo().substring(0, 4).equals("0001")){
+
+                    li(memoria.get(i).getConteudo());
+
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de add
+                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("0101")){
+                    
+                    add(memoria.get(i).getConteudo());
+                
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de sub
+                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("0110")){
+                        
+                    sub(memoria.get(i).getConteudo());
+
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de move
+                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("0100")){
+                        
+                    move(memoria.get(i).getConteudo());
+
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de jump
+                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("1100")){
+                            
+                    i = j(memoria.get(i).getConteudo());
+
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de slt
+                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("1010")){
+                            
+                    slt(memoria.get(i).getConteudo());
+                
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de beq
+                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("0111")){
+                                
+                    i = beq(memoria.get(i).getConteudo(), i);
+                
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de bne
+                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("1000")){
+                                    
+                    i = bne(memoria.get(i).getConteudo(), i);
+                
                 }
             }
+            // System.out.println(memoria.get(i).getConteudo());
         }
+        
     }
 
     //Função que recebe como parâmetro uma linha de código MIPS e a converte para linguagem de montagem
@@ -115,7 +154,7 @@ public class UC{
         String LIbinario = completarBinario(Integer.toBinaryString(OPCODELI), 4);
         String LWbinario = completarBinario(Integer.toBinaryString(OPCODELW), 4);
         String SWbinario = completarBinario(Integer.toBinaryString(OPCODESW), 4);
-        String MOVbinario = completarBinario(Integer.toBinaryString(OPCODEMOV), 4);
+        String MOVEbinario = completarBinario(Integer.toBinaryString(OPCODEMOVE), 4);
         String ADDbinario = completarBinario(Integer.toBinaryString(OPCODEADD), 4);
         String SUBbinario = completarBinario(Integer.toBinaryString(OPCODESUB), 4);
         String BEQbinario = completarBinario(Integer.toBinaryString(OPCODEBEQ), 4);
@@ -133,7 +172,7 @@ public class UC{
         linguagemdeMontagem = linguagemdeMontagem.replace("li", LIbinario);
         linguagemdeMontagem = linguagemdeMontagem.replace("lw", LWbinario);
         linguagemdeMontagem = linguagemdeMontagem.replace("sw", SWbinario);
-        linguagemdeMontagem = linguagemdeMontagem.replace("mov", MOVbinario);
+        linguagemdeMontagem = linguagemdeMontagem.replace("move", MOVEbinario);
         linguagemdeMontagem = linguagemdeMontagem.replace("add", ADDbinario);
         linguagemdeMontagem = linguagemdeMontagem.replace("sub", SUBbinario);
         linguagemdeMontagem = linguagemdeMontagem.replace("beq", BEQbinario);
@@ -156,6 +195,12 @@ public class UC{
     //Completa o número com 0 se o número ocupar menos que 4 bits
     public static String completarBinario(String binario, int numeroBits){
         
+        //Se o número binário possuir mais de 16 bits
+        if(binario.length() > 16){
+            int posicoes = binario.length() - 16;
+            return binario.substring(posicoes, binario.length());
+        }
+
         //String que armazenará os zeros a esquerda
         String zeros = "";
         //completa o número certo de zeros a esquerda
@@ -189,8 +234,176 @@ public class UC{
         memoria.add(novaMemoria);
     }
 
-    public static String add(){
-        return "maoe";
+    //Realiza o LI
+    public static void li(String codigoMaquina){
+        
+        //Separa os opcodes de acordo com o espaço
+        String opcodes[] = codigoMaquina.split(" ");
+
+        //Compara cada um dos códigos com os registradores, se for igual, atribui o valor da constante ao registrador
+        if(opcodes[1].equals("001")){
+            s1 = opcodes[2];
+        }else if(opcodes[1].equals("010")){
+            s2 = opcodes[2];
+        }else if(opcodes[1].equals("011")){
+            s3 = opcodes[2];
+        }else if(opcodes[1].equals("100")){
+            s4 = opcodes[2];
+        }else if(opcodes[1].equals("101")){
+            s5 = opcodes[2];
+        }
+
+    }
+
+    //Realiza o MOVE
+    public static void move(String codigoMaquina){
+        
+        //Separa os opcodes de acordo com o espaço
+        String opcodes[] = codigoMaquina.split(" ");
+
+        //Compara cada um dos códigos com os registradores, se for igual, atribui o valor da constante ao registrador
+        if(opcodes[1].equals("001")){
+            s1 = converterRegistrador(opcodes[2]);
+        }else if(opcodes[1].equals("010")){
+            s2 = converterRegistrador(opcodes[2]);
+        }else if(opcodes[1].equals("011")){
+            s3 = converterRegistrador(opcodes[2]);
+        }else if(opcodes[1].equals("100")){
+            s4 = converterRegistrador(opcodes[2]);
+        }else if(opcodes[1].equals("101")){
+            s5 = converterRegistrador(opcodes[2]);
+        }
+
+    }
+
+    //Realiza o J
+    public static int j(String codigoMaquina){
+
+        //Separa os opcodes de acordo com o espaço
+        String opcodes[] = codigoMaquina.split(" ");
+
+        //Retorna a linha correspondente em decimal
+        return Integer.parseInt((opcodes[1]), 2);
+    } 
+
+    //Realiza o SLT
+    public static int slt(String codigoMaquina){
+
+        //Separa os opcodes de acordo com o espaço
+        String opcodes[] = codigoMaquina.split(" ");
+
+        
+        return Integer.parseInt((opcodes[1]), 2);
+    } 
+
+    //Realiza o BEQ
+    public static int beq(String codigoMaquina, int posicaoAtual){
+
+        //Separa os opcodes de acordo com o espaço
+        String opcodes[] = codigoMaquina.split(" ");
+
+        //pega o valor de cada registrador ou constante passados por parâmetro
+        int pam1 = Integer.parseInt(converterRegistrador(opcodes[1]), 2);
+        int pam2 = Integer.parseInt(converterRegistrador(opcodes[2]), 2);
+
+        //Se os parâmetros forem iguais, retorna a linha informada para realizar o pulo
+        if(pam1 == pam2){
+            return Integer.parseInt(opcodes[3], 2);
+        }
+
+        //Se os parâmetros não forem iguais, retorna a mesma posição, não realizando o pulo
+        return posicaoAtual;
+        
+    } 
+
+    //Realiza o BNE
+    public static int bne(String codigoMaquina, int posicaoAtual){
+
+        //Separa os opcodes de acordo com o espaço
+        String opcodes[] = codigoMaquina.split(" ");
+
+        //pega o valor de cada registrador ou constante passados por parâmetro
+        int pam1 = Integer.parseInt(converterRegistrador(opcodes[1]), 2);
+        int pam2 = Integer.parseInt(converterRegistrador(opcodes[2]), 2);
+
+        //Se os parâmetros forem diferentes, retorna a linha informada para realizar o pulo
+        if(pam1 != pam2){
+            return Integer.parseInt(opcodes[3], 2);
+        }
+
+        //Se os parâmetros forem iguais, retorna a mesma posição, não realizando o pulo
+        return posicaoAtual;
+    }
+
+    //Realiza o ADD
+    public static void add(String codigoMaquina){
+        
+        //Separa os opcodes de acordo com o espaço
+        String opcodes[] = codigoMaquina.split(" ");
+
+        //Converte para inteiro o binário de acordo com o seu valor no registrador
+        int soma1 = Integer.parseInt(converterRegistrador(opcodes[2]), 2);
+        int soma2 = Integer.parseInt(converterRegistrador(opcodes[3]), 2);
+        
+        //Compara os opcodes com os registradores e atribui o resultado da soma no registrador equivalente
+        if(opcodes[1].equals("001")){
+            s1 = completarBinario(Integer.toBinaryString(soma1 + soma2), 16);
+        }else if(opcodes[1].equals("010")){
+            s2 = completarBinario(Integer.toBinaryString(soma1 + soma2), 16);
+        }else if(opcodes[1].equals("011")){
+            s3 = completarBinario(Integer.toBinaryString(soma1 + soma2), 16);
+        }else if(opcodes[1].equals("100")){
+            s4 = completarBinario(Integer.toBinaryString(soma1 + soma2), 16);
+        }else if(opcodes[1].equals("101")){
+            s5 = completarBinario(Integer.toBinaryString(soma1 + soma2), 16);
+        }
+
+    }
+
+    //Realiza o SUB
+    public static void sub(String codigoMaquina){
+        
+        //Separa os opcodes de acordo com o espaço
+        String opcodes[] = codigoMaquina.split(" ");
+
+        //Converte para inteiro o binário de acordo com o seu valor no registrador
+        int sub1 = Integer.parseInt(converterRegistrador(opcodes[2]), 2);
+        int sub2 = Integer.parseInt(converterRegistrador(opcodes[3]), 2);
+        
+        //Compara os opcodes com os registradores e atribui o resultado da subtração no registrador equivalente
+        if(opcodes[1].equals("001")){
+            s1 = completarBinario(Integer.toBinaryString(sub1 - sub2), 16);
+        }else if(opcodes[1].equals("010")){
+            s2 = completarBinario(Integer.toBinaryString(sub1 - sub2), 16);
+        }else if(opcodes[1].equals("011")){
+            s3 = completarBinario(Integer.toBinaryString(sub1 - sub2), 16);
+        }else if(opcodes[1].equals("100")){
+            s4 = completarBinario(Integer.toBinaryString(sub1 - sub2), 16);
+        }else if(opcodes[1].equals("101")){
+            s5 = completarBinario(Integer.toBinaryString(sub1 - sub2), 16);
+        }
+
+    }
+
+    //Retorna o valor de um registrador de acordo com um opcode
+    public static String converterRegistrador(String opcode){
+        
+        //Verifica se o opcode equivale a um registrador, se sim, retorna o valor desse registrador
+        if(opcode.equals("001")){
+            return s1;
+        }else if(opcode.equals("010")){
+            return s2;
+        }else if(opcode.equals("011")){
+            return s3;    
+        }else if(opcode.equals("100")){
+            return s4;
+        }else if(opcode.equals("101")){
+            return s5;
+        }
+
+        //Se o opcode não equivale a nenhum opcode, retorna o mesmo, provavelmente é uma constante
+        return opcode;
+
     }
 
 }
