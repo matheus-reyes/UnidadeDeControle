@@ -1,8 +1,7 @@
 .text
 
 li $s1, 10
-li $s2, 10
-move $s5, $s1
-bne $s1, $s2, 7
-add $s3, $s1, $s2
-sub $s4, $s2, $s1
+li $s2, 15
+beq $s1, 9, 7
+add $s3, $s1, 5
+sub $s4, $s2, 7
