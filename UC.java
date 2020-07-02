@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.util.*;
 
@@ -9,10 +8,14 @@ public class UC{
     
     //Instruções MIPS e seus opcodes
     final static int OPCODELI = 1, OPCODELW = 2, OPCODESW = 3, OPCODEMOVE = 4, OPCODEADD = 5, 
-    OPCODESUB = 6, OPCODEBEQ = 7, OPCODEBNE = 8, OPCODEJ = 9, OPCODESLT = 10;
+    OPCODESUB = 6, OPCODEBEQ = 7, OPCODEBNE = 8, OPCODEJ = 9, OPCODESLT = 10, OPCODELA = 11;
 
+    //Lista Ligada de objetos memória (contém o conteúdo do código MIPS e seus endereços)
     static LinkedList<Memoria> memoria = new LinkedList<Memoria>();
+    //Lista Ligada de objetos microprograma (contém o o conteúdo do microprograma e seus endereços)
     static LinkedList<Microprograma> microprograma = new LinkedList<Microprograma>();
+    //Map que possui a chave como nome do vetor e o valor como o início do endereço desse vetor
+    static Map <String, Integer> listas = new LinkedHashMap <String, Integer>();
 
     static String s1 = "", s2 = "", s3 = "", s4 = "";
 
@@ -28,16 +31,37 @@ public class UC{
             //String que receberá o código de montagem linha por linha
             String codigodeMontagem;
             String codigodeMaquina;
-            
+            boolean text = false;
+            boolean data = false;
+
             //Percorre o documento com o código MIPS
             while ((linha = inputStream.readLine()) != null) {
 
-                //Recebe o código de montagem linha por linha
-                codigodeMontagem = FuncoesAuxiliares.converterLinguagemdeMontagem(linha);
-                //Converte para linguagem de máquina linha por linha
-                codigodeMaquina = FuncoesAuxiliares.converterLinguagemdeMaquina(codigodeMontagem);
-                //Armazena o código na memória
-                FuncoesAuxiliares.armazenarNaMemoria(codigodeMaquina);
+                //se a linha for igual a .text, marca na variável text
+                if(linha.equals(".text")){
+                    text = true;
+                    data = false;
+                // Se a linha for igual a .data, marca na variável data
+                }else if(linha.equals(".data")){
+                    data = true;
+                    text = false;
+                }
+                
+                // Se a última linha foi text, faz as operações relacionadas a esse marcador
+                if(text && !linha.equals("") && !linha.equals(".text")){
+                    //Recebe o código de montagem linha por linha
+                    codigodeMontagem = FuncoesAuxiliares.converterLinguagemdeMontagem(linha);
+                    //Converte para linguagem de máquina linha por linha
+                    codigodeMaquina = FuncoesAuxiliares.converterLinguagemdeMaquina(codigodeMontagem);
+                    //Armazena o código na memória
+                    FuncoesAuxiliares.armazenarNaMemoria(codigodeMaquina);
+                }
+
+                //Se a última linha foi data, faz as operações relacionadas a esse marcador
+                if(data && !linha.equals("") && !linha.equals(".data")){
+                    FuncoesAuxiliares.armazenarLista(linha);
+                }
+
             }
 
         }finally {
@@ -93,6 +117,16 @@ public class UC{
                 }else if(memoria.get(i).getConteudo().substring(0, 4).equals("1000")){
                                     
                     i = FuncoesULA.bne(memoria.get(i).getConteudo(), i);
+                
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de la
+                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("1011")){
+                                        
+                    FuncoesULA.la(memoria.get(i).getConteudo());
+                
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de lw
+                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("0010")){
+                                            
+                    FuncoesULA.lw(memoria.get(i).getConteudo());
                 
                 }
             }

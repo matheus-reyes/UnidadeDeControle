@@ -1,6 +1,37 @@
 import java.io.*;
 public class FuncoesAuxiliares {
     
+    //Variável que armazena a primeira posição disponível para memória da lista
+    static int primeiraPosicaoDisponivel = 500;
+
+    //Função responsável por ler a linha de declação do array e armazenar na memória
+    public static void armazenarLista(String linha){
+
+        //Separa a String com o caractere dois pontos
+        String[] lista = linha.split(":");
+        //Captura o nome da lista informado no código MIPS
+        String nomeLista = lista[0];
+        //Insere no Map a chave sendo o nome da lista e valor sendo a primeira posição
+        UC.listas.put(nomeLista, primeiraPosicaoDisponivel);
+        //Separa a String com o caractere espaço
+        String[] valoresLista = lista[1].split(" ");
+        for(int i = 2; i < valoresLista.length; i++){
+            //transforma virgula em espaço
+            valoresLista[i] = valoresLista[i].replace(",", " ");
+            //tira os espaços
+            valoresLista[i] = valoresLista[i].replace(" ", "");
+            //Cria endereços sucessivos de acordo com o tamanho de linhas
+            String endereco = completarBinario(Integer.toBinaryString(primeiraPosicaoDisponivel), 16);
+            //Cria uma instância de memória passando o endereço e o conteúdo sendo o códugo de máquina
+            Memoria novaMemoria = new Memoria(endereco, completarBinario(Integer.toBinaryString(Integer.valueOf(valoresLista[i])), 16));
+            //Adiciona a instância da memória na lista ligada
+            UC.memoria.add(novaMemoria);
+            //Atualiza a primeira posição disponível
+            primeiraPosicaoDisponivel++;
+        }
+
+    }
+
     //função responsável por ler o microprograma e armazenar os dados
     public static void lerMicroprograma() throws IOException{
         
@@ -93,6 +124,21 @@ public class FuncoesAuxiliares {
             String codigoMaquina = "";
             //Inteiro que receberá a posição que deve ser ignorada
             int posicaoIgnorada = -1;
+            String constanteLw = ""; 
+            
+            if(codigoMips.substring(0, 2).equals("lw")){
+                int posicaoInicialConstante = 0;
+                int posicaoFinalConstante = 0;
+                for(int i = 0; i < codigoMips.length(); i++){
+                    if(codigoMips.charAt(i) == ','){
+                        posicaoInicialConstante = i;
+                    }else if(codigoMips.charAt(i) == '('){
+                        posicaoFinalConstante = i;
+                    }
+                }
+
+                constanteLw = codigoMips.substring(posicaoInicialConstante + 2, posicaoFinalConstante - 1);
+            }
             
             //Transforma os registradores em Linguagem de Montagem
             for(int i = 0; i < codigoMips.length(); i++){
@@ -109,15 +155,27 @@ public class FuncoesAuxiliares {
                     codigoMaquina += "4";
                     posicaoIgnorada = i + 1;
                 }else{
-                    if((i != posicaoIgnorada) && (!isInteger(String.valueOf(codigoMips.charAt(i)), 10))){
+                    if(codigoMips.substring(0, 2).equals("la")){
+                        if((i != posicaoIgnorada) && (!isInteger(String.valueOf(codigoMips.charAt(i)), 10)) && i < 8){
+                            codigoMaquina += codigoMips.charAt(i);
+                        }
+
+                    }else if((i != posicaoIgnorada) && (!isInteger(String.valueOf(codigoMips.charAt(i)), 10))){
                         codigoMaquina += codigoMips.charAt(i);
                     }
                 }
             }
-    
+            
+            System.out.println(codigoMaquina);
+
+            //Remove os parênteses
+            codigoMaquina = codigoMaquina.replace("(", "");
+            codigoMaquina = codigoMaquina.replace(")", "");
+
             //Converte o valor para binário
             String[] codigoMipsSeparado = codigoMips.split(" ");
-    
+            
+       
             for(int i = 0; i < codigoMipsSeparado.length; i++){
                 if(isInteger(codigoMipsSeparado[i].replace(",", ""), 10)){
                     int constante = Integer.parseInt(codigoMipsSeparado[i].replace(",", ""));
@@ -125,7 +183,21 @@ public class FuncoesAuxiliares {
                     codigoMaquina += constanteConvertida;
                 }
             }
-    
+
+            try{
+                if(!isInteger(codigoMipsSeparado[codigoMipsSeparado.length - 1], 10)){
+                    String enderecoLista = completarBinario(Integer.toBinaryString(UC.listas.get(codigoMipsSeparado[codigoMipsSeparado.length - 1])), 12);
+                    codigoMaquina += enderecoLista;
+                }
+            }catch(Exception e){
+
+            }
+
+            if(codigoMips.substring(0, 2).equals("lw")){
+                System.out.println(constanteLw);
+            }
+            
+
             //Retorna o código de máquina
             return codigoMaquina;
         }
@@ -144,6 +216,7 @@ public class FuncoesAuxiliares {
             String BNEbinario = completarBinario(Integer.toBinaryString(UC.OPCODEBNE), 4);
             String Jbinario = completarBinario(Integer.toBinaryString(UC.OPCODEJ), 4);
             String SLTbinario = completarBinario(Integer.toBinaryString(UC.OPCODESLT), 4);
+            String LAbinario = completarBinario(Integer.toBinaryString(UC.OPCODELA), 4);
     
             String S1binario = completarBinario(Integer.toBinaryString(UC.OPCODES1), 3);
             String S2binario = completarBinario(Integer.toBinaryString(UC.OPCODES2), 3);
@@ -161,6 +234,7 @@ public class FuncoesAuxiliares {
             linguagemdeMontagem = linguagemdeMontagem.replace("bne", BNEbinario);
             linguagemdeMontagem = linguagemdeMontagem.replace("j", Jbinario);
             linguagemdeMontagem = linguagemdeMontagem.replace("slt", SLTbinario);
+            linguagemdeMontagem = linguagemdeMontagem.replace("la", LAbinario);
     
             linguagemdeMontagem = linguagemdeMontagem.replace("$1", S1binario);
             linguagemdeMontagem = linguagemdeMontagem.replace("$2", S2binario);

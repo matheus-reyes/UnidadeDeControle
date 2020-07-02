@@ -1,4 +1,47 @@
 public class FuncoesULA {
+
+    //Realiza o LW
+    public static void lw(String codigoMaquina){
+        
+        String opcodes[] = new String[3];
+        //Recebe em cada posição dos opcodes o trecho da String correspondente
+        opcodes[0] = codigoMaquina.substring(0, 4);
+        opcodes[1] = codigoMaquina.substring(4, 7);
+        opcodes[2] = codigoMaquina.substring(7, 19);
+
+        //Compara cada um dos códigos com os registradores, se for igual, atribui o valor da constante ao registrador
+        if(opcodes[1].equals("001")){
+            UC.s1 = opcodes[2];
+        }else if(opcodes[1].equals("010")){
+            UC.s2 = opcodes[2];
+        }else if(opcodes[1].equals("011")){
+            UC.s3 = opcodes[2];
+        }else if(opcodes[1].equals("100")){
+            UC.s4 = opcodes[2];
+        }
+    }
+    
+    //Realiza o LA
+    public static void la(String codigoMaquina){
+        
+        String opcodes[] = new String[3];
+        //Recebe em cada posição dos opcodes o trecho da String correspondente
+        opcodes[0] = codigoMaquina.substring(0, 4);
+        opcodes[1] = codigoMaquina.substring(4, 7);
+        opcodes[2] = codigoMaquina.substring(7, 19);
+
+        //Compara cada um dos códigos com os registradores, se for igual, atribui o valor da constante ao registrador
+        if(opcodes[1].equals("001")){
+            UC.s1 = opcodes[2];
+        }else if(opcodes[1].equals("010")){
+            UC.s2 = opcodes[2];
+        }else if(opcodes[1].equals("011")){
+            UC.s3 = opcodes[2];
+        }else if(opcodes[1].equals("100")){
+            UC.s4 = opcodes[2];
+        }
+    }
+
     //Realiza o LI
     public static void li(String codigoMaquina){
         
