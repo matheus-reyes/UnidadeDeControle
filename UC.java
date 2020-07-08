@@ -72,62 +72,96 @@ public class UC{
             }
         } 
 
-        //Percorre a lista de memórias
-        for(int i = 0; i < memoria.size(); i++){
-
+        boolean pulou = false;
+        int enderecoAtual = 0;
+        // Percorre a lista de memórias
+        for(int i = 0; i < 500; i++){
+            
+            if(!pulou){
+                enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(i);
+            }
+            
             //Ignora linhas vazias
-            if(!memoria.get(i).getConteudo().equals("")){
+            if(!memoria.get(enderecoAtual).getConteudo().equals("")){
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de li
-                if(memoria.get(i).getConteudo().substring(0, 4).equals("0001")){
+                if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0001")){
 
-                    FuncoesULA.li(memoria.get(i).getConteudo());
+                    FuncoesULA.li(memoria.get(enderecoAtual).getConteudo());
+                    pulou = false;
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de add
-                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("0101")){
+                }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0101")){
                     
-                    FuncoesULA.add(memoria.get(i).getConteudo());
+                    FuncoesULA.add(memoria.get(enderecoAtual).getConteudo());
+                    pulou = false;
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de sub
-                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("0110")){
+                }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0110")){
                         
-                    FuncoesULA.sub(memoria.get(i).getConteudo());
-
+                    FuncoesULA.sub(memoria.get(enderecoAtual).getConteudo());
+                    pulou = false;
+        
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de move
-                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("0100")){
+                }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0100")){
                         
-                    FuncoesULA.move(memoria.get(i).getConteudo());
+                    FuncoesULA.move(memoria.get(enderecoAtual).getConteudo());
+                    pulou = false;
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de jump
-                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("1001")){
-                            
-                    i = FuncoesULA.j(memoria.get(i).getConteudo());
+                }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("1001")){
+                   
+                    enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(FuncoesULA.j(memoria.get(enderecoAtual).getConteudo()));
+                    pulou = true;
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de slt
-                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("1010")){
+                }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("1010")){
                             
-                    FuncoesULA.slt(memoria.get(i).getConteudo());
+                    FuncoesULA.slt(memoria.get(enderecoAtual).getConteudo());
+                    pulou = false;
                 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de beq
-                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("0111")){
-                                
-                    i = FuncoesULA.beq(memoria.get(i).getConteudo(), i);
-                
+                }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0111")){
+                    
+                    int enderecoAntigo = enderecoAtual;
+                    enderecoAtual = FuncoesULA.beq(memoria.get(enderecoAtual).getConteudo(), enderecoAtual);
+                    //Houve pulo
+                    if(enderecoAtual != (enderecoAntigo + 1)){
+                        enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(enderecoAtual);
+                    }
+
+                    pulou = true;
+                    
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de bne
-                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("1000")){
-                                    
-                    i = FuncoesULA.bne(memoria.get(i).getConteudo(), i);
-                
+                }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("1000")){
+                    
+                    int enderecoAntigo = enderecoAtual;
+                    enderecoAtual = FuncoesULA.bne(memoria.get(enderecoAtual).getConteudo(), enderecoAtual);
+                    //Houve pulo
+                    if(enderecoAtual != (enderecoAntigo + 1)){
+                        enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(enderecoAtual);
+                    }
+
+                    pulou = true;
+                   
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de la
-                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("1011")){
+                }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("1011")){
                                         
-                    FuncoesULA.la(memoria.get(i).getConteudo());
+                    FuncoesULA.la(memoria.get(enderecoAtual).getConteudo());
+                    pulou = false;
                 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de lw
-                }else if(memoria.get(i).getConteudo().substring(0, 4).equals("0010")){
+                }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0010")){
                                             
-                    FuncoesULA.lw(memoria.get(i).getConteudo());
+                    FuncoesULA.lw(memoria.get(enderecoAtual).getConteudo());
+                    pulou = false;
                 
+                //Se o código nas 4 primeiras posições for equivalente ao opcode de sw
+                }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0011")){
+
+                    FuncoesULA.sw(memoria.get(enderecoAtual).getConteudo());
+                    pulou = false;
+                    
                 }
             }
             // System.out.println(memoria.get(i).getConteudo());

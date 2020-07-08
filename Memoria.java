@@ -16,4 +16,8 @@ public class Memoria {
         return this.conteudo;
     }
 
+    public void setConteudo(String conteudo){
+        this.conteudo = conteudo;
+    }
+
 }

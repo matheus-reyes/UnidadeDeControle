@@ -2,7 +2,21 @@ import java.io.*;
 public class FuncoesAuxiliares {
     
     //Variável que armazena a primeira posição disponível para memória da lista
-    static int primeiraPosicaoDisponivel = 500;
+    static int primeiraPosicaoDisponivelLista = 500;
+    static int primeiraPosicaoDisponivel = 0;
+
+    //Recebe como parâmetro um endereço na memória e retorna a posição da lista da memória correspondente
+    public static int encontrarPosicaoMemoria(int endereco){
+        String enderecoBinario = completarBinario(Integer.toBinaryString(endereco), 12);
+        System.out.println(enderecoBinario);
+        int posicao = 0;
+        for(int i = 0; i < UC.memoria.size(); i++){
+            if((UC.memoria.get(i).getEndereco()).equals(enderecoBinario)){
+                posicao = i;
+            }
+        }
+        return posicao;
+    }
 
     //Função responsável por ler a linha de declação do array e armazenar na memória
     public static void armazenarLista(String linha){
@@ -12,7 +26,7 @@ public class FuncoesAuxiliares {
         //Captura o nome da lista informado no código MIPS
         String nomeLista = lista[0];
         //Insere no Map a chave sendo o nome da lista e valor sendo a primeira posição
-        UC.listas.put(nomeLista, primeiraPosicaoDisponivel);
+        UC.listas.put(nomeLista, primeiraPosicaoDisponivelLista);
         //Separa a String com o caractere espaço
         String[] valoresLista = lista[1].split(" ");
         for(int i = 2; i < valoresLista.length; i++){
@@ -21,13 +35,13 @@ public class FuncoesAuxiliares {
             //tira os espaços
             valoresLista[i] = valoresLista[i].replace(" ", "");
             //Cria endereços sucessivos de acordo com o tamanho de linhas
-            String endereco = completarBinario(Integer.toBinaryString(primeiraPosicaoDisponivel), 16);
+            String endereco = completarBinario(Integer.toBinaryString(primeiraPosicaoDisponivelLista), 12);
             //Cria uma instância de memória passando o endereço e o conteúdo sendo o códugo de máquina
-            Memoria novaMemoria = new Memoria(endereco, completarBinario(Integer.toBinaryString(Integer.valueOf(valoresLista[i])), 16));
+            Memoria novaMemoria = new Memoria(endereco, completarBinario(Integer.toBinaryString(Integer.valueOf(valoresLista[i])), 12));
             //Adiciona a instância da memória na lista ligada
             UC.memoria.add(novaMemoria);
             //Atualiza a primeira posição disponível
-            primeiraPosicaoDisponivel++;
+            primeiraPosicaoDisponivelLista++;
         }
 
     }
@@ -48,7 +62,7 @@ public class FuncoesAuxiliares {
             while ((linha = inputStream.readLine()) != null) {
                 
                 //Cria endereços sucessivos de acordo com o tamanho de linhas
-                String endereco = completarBinario(Integer.toBinaryString(UC.microprograma.size()), 16);
+                String endereco = completarBinario(Integer.toBinaryString(UC.microprograma.size()), 12);
                 //Cria uma instância de memória passando o endereço e o conteúdo da linha
                 Microprograma linhaMicroprograma = new Microprograma (endereco, linha);
                 //Adiciona a instância da memória na lista ligada
@@ -64,7 +78,7 @@ public class FuncoesAuxiliares {
         } 
     }
 
-    //Retorna o valor de um registrador de acordo com um opcode
+    //Verifica se há um registrador de acordo com um opcode
     public static boolean verificaRegistrador(String opcode){
         
         //Variável que verifica se o opcode é um registrador
@@ -124,22 +138,7 @@ public class FuncoesAuxiliares {
             String codigoMaquina = "";
             //Inteiro que receberá a posição que deve ser ignorada
             int posicaoIgnorada = -1;
-            String constanteLw = ""; 
-            
-            if(codigoMips.substring(0, 2).equals("lw")){
-                int posicaoInicialConstante = 0;
-                int posicaoFinalConstante = 0;
-                for(int i = 0; i < codigoMips.length(); i++){
-                    if(codigoMips.charAt(i) == ','){
-                        posicaoInicialConstante = i;
-                    }else if(codigoMips.charAt(i) == '('){
-                        posicaoFinalConstante = i;
-                    }
-                }
 
-                constanteLw = codigoMips.substring(posicaoInicialConstante + 2, posicaoFinalConstante - 1);
-            }
-            
             //Transforma os registradores em Linguagem de Montagem
             for(int i = 0; i < codigoMips.length(); i++){
                 if(codigoMips.charAt(i) == 's' && codigoMips.charAt(i + 1) == '1' && i < (codigoMips.length() - 1)){
@@ -166,8 +165,6 @@ public class FuncoesAuxiliares {
                 }
             }
             
-            System.out.println(codigoMaquina);
-
             //Remove os parênteses
             codigoMaquina = codigoMaquina.replace("(", "");
             codigoMaquina = codigoMaquina.replace(")", "");
@@ -189,14 +186,9 @@ public class FuncoesAuxiliares {
                     String enderecoLista = completarBinario(Integer.toBinaryString(UC.listas.get(codigoMipsSeparado[codigoMipsSeparado.length - 1])), 12);
                     codigoMaquina += enderecoLista;
                 }
-            }catch(Exception e){
+            }catch(Exception ignore){
 
-            }
-
-            if(codigoMips.substring(0, 2).equals("lw")){
-                System.out.println(constanteLw);
-            }
-            
+            }            
 
             //Retorna o código de máquina
             return codigoMaquina;
@@ -264,9 +256,9 @@ public class FuncoesAuxiliares {
         //Completa o número com 0 se o número ocupar menos que 4 bits
         public static String completarBinario(String binario, int numeroBits){
             
-            //Se o número binário possuir mais de 16 bits
-            if(binario.length() > 16){
-                int posicoes = binario.length() - 16;
+            //Se o número binário possuir mais de 12 bits
+            if(binario.length() > 12){
+                int posicoes = binario.length() - 12;
                 return binario.substring(posicoes, binario.length());
             }
     
@@ -309,7 +301,8 @@ public class FuncoesAuxiliares {
         //Armazena os dados na memória
         public static void armazenarNaMemoria(String linguagemdeMaquina){
             //Cria endereços sucessivos de acordo com o tamanho de linhas
-            String endereco = completarBinario(Integer.toBinaryString(UC.memoria.size()), 16);
+            String endereco = completarBinario(Integer.toBinaryString(primeiraPosicaoDisponivel), 12);
+            primeiraPosicaoDisponivel++;
             //Cria uma instância de memória passando o endereço e o conteúdo sendo o códugo de máquina
             Memoria novaMemoria = new Memoria(endereco, linguagemdeMaquina);
             //Adiciona a instância da memória na lista ligada
