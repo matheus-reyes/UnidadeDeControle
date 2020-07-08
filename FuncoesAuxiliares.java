@@ -8,7 +8,6 @@ public class FuncoesAuxiliares {
     //Recebe como parâmetro um endereço na memória e retorna a posição da lista da memória correspondente
     public static int encontrarPosicaoMemoria(int endereco){
         String enderecoBinario = completarBinario(Integer.toBinaryString(endereco), 12);
-        System.out.println(enderecoBinario);
         int posicao = 0;
         for(int i = 0; i < UC.memoria.size(); i++){
             if((UC.memoria.get(i).getEndereco()).equals(enderecoBinario)){
@@ -16,6 +15,19 @@ public class FuncoesAuxiliares {
             }
         }
         return posicao;
+    }
+
+    public static void exibirCicloExecucao(String enderecoInicio){
+
+        int enderecoComeco = Integer.parseInt(enderecoInicio, 2);
+
+        for(int i = enderecoComeco; i < UC.microprograma.size(); i++){
+            System.out.println(UC.microprograma.get(i).getConteudo());      
+            if(UC.microprograma.get(i).getConteudo().equals("")){
+                break;
+            }
+        }
+
     }
 
     //Função responsável por ler a linha de declação do array e armazenar na memória
@@ -60,7 +72,6 @@ public class FuncoesAuxiliares {
             
             //Percorre o documento com o código MIPS
             while ((linha = inputStream.readLine()) != null) {
-                
                 //Cria endereços sucessivos de acordo com o tamanho de linhas
                 String endereco = completarBinario(Integer.toBinaryString(UC.microprograma.size()), 12);
                 //Cria uma instância de memória passando o endereço e o conteúdo da linha

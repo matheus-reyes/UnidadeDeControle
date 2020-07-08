@@ -3,6 +3,12 @@ import java.util.*;
 
 public class UC{
     
+    //Barramentos
+    static String BarramentoInterno = "", BarramentoExterno = "";
+
+    //Registradores especiais
+    static String MAR = "", MBR = "", PC = "", IR = "", CAR = "", CBR = "";
+
     //Registradores e seus opcodes
     final static int OPCODES1 = 1, OPCODES2 = 2, OPCODES3 = 3, OPCODES4 = 4;
     
@@ -72,6 +78,9 @@ public class UC{
             }
         } 
 
+        //Função que lê o microprograma linha a linha e armazena na lista microprograma
+        FuncoesAuxiliares.lerMicroprograma();
+
         boolean pulou = false;
         int enderecoAtual = 0;
         // Percorre a lista de memórias
@@ -86,7 +95,7 @@ public class UC{
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de li
                 if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0001")){
-
+                    
                     FuncoesULA.li(memoria.get(enderecoAtual).getConteudo());
                     pulou = false;
 
@@ -95,6 +104,11 @@ public class UC{
                     
                     FuncoesULA.add(memoria.get(enderecoAtual).getConteudo());
                     pulou = false;
+
+                    //Armazena no CAR a primeira linha do ciclo de execução do ADD (linha 18)
+                    CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(18), 12);
+
+                    FuncoesAuxiliares.exibirCicloExecucao(CAR);
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de sub
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0110")){
@@ -164,13 +178,12 @@ public class UC{
                     
                 }
             }
-            // System.out.println(memoria.get(i).getConteudo());
+
         }
         System.out.println("S1: " + (!s1.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s1), 2) : s1));
         System.out.println("S2: " + (!s2.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s2), 2) : s2));
         System.out.println("S3: " + (!s3.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s3), 2) : s3));
         System.out.println("S4: " + (!s4.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s4), 2) : s4));
-        FuncoesAuxiliares.lerMicroprograma();
     }
 
 }
