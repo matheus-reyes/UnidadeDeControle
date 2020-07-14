@@ -39,6 +39,11 @@ public class FuncoesULA {
         opcodes[2] = codigoMaquina.substring(7, 10);
         //Constante que será somada com o endereço do vetor
         opcodes[3] = codigoMaquina.substring(10, 22);
+        
+        //Armazena no CAR a primeira linha do ciclo de execução do ADD (linha 72)
+        UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(72), 12);
+        FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
+        
         //Variável que armazena o valor correspondente a posição do vetor 
         String valorVetor = "";
         //Variável para guardar o endereço do vetor
@@ -95,6 +100,10 @@ public class FuncoesULA {
         opcodes[1] = codigoMaquina.substring(4, 7);
         opcodes[2] = codigoMaquina.substring(7, 19);
 
+        //Armazena no CAR a primeira linha do ciclo de execução do ADD (linha 65)
+        UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(65), 12);
+        FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
+
         //Compara cada um dos códigos com os registradores, se for igual, atribui o valor da constante ao registrador
         if(opcodes[1].equals("001")){
             UC.s1 = opcodes[2];
@@ -115,6 +124,10 @@ public class FuncoesULA {
         opcodes[0] = codigoMaquina.substring(0, 4);
         opcodes[1] = codigoMaquina.substring(4, 7);
         opcodes[2] = codigoMaquina.substring(7, 10);
+
+        //Armazena no CAR a primeira linha do ciclo de execução do ADD (linha 38)
+        UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(38), 12);
+        FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
 
         //Compara cada um dos códigos com os registradores, se for igual, atribui o valor da constante ao registrador
         if(opcodes[1].equals("001")){
@@ -266,8 +279,16 @@ public class FuncoesULA {
         //Verifica se o segundo parâmetro é uma constante ou registrador e armazena os bits correspondentes
         if(FuncoesAuxiliares.verificaRegistrador(codigoMaquina.substring(10, 22))){
             opcodes[3] = codigoMaquina.substring(10, 13);
+
+            //Armazena no CAR a primeira linha do ciclo de execução do ADD registrador com registrador (linha 12)
+            UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(12), 12);
+            FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
         }else{
             opcodes[3] = codigoMaquina.substring(10, 22);
+
+            //Armazena no CAR a primeira linha do ciclo de execução do ADD registrador com constante (linha 18)
+            UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(18), 12);
+            FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
         }
 
         //Converte para inteiro o binário de acordo com o seu valor no registrador
@@ -299,8 +320,16 @@ public class FuncoesULA {
         //Verifica se o segundo parâmetro é uma constante ou registrador e armazena os bits correspondentes
         if(FuncoesAuxiliares.verificaRegistrador(codigoMaquina.substring(10, 22))){
             opcodes[3] = codigoMaquina.substring(10, 13);
+
+            //Armazena no CAR a primeira linha do ciclo de execução do SUB registrador com registrador (linha 25)
+            UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(25), 12);
+            FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
         }else{
             opcodes[3] = codigoMaquina.substring(10, 22);
+
+            //Armazena no CAR a primeira linha do ciclo de execução do SUB registrador com constante (linha 31)
+            UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(31), 12);
+            FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
         }
 
         //Converte para inteiro o binário de acordo com o seu valor no registrador

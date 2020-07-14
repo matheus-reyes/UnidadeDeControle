@@ -7,7 +7,7 @@ public class UC{
     static String BarramentoInterno = "", BarramentoExterno = "";
 
     //Registradores especiais
-    static String MAR = "", MBR = "", PC = "", IR = "", CAR = "", CBR = "";
+    static String ULA = "", MAR = "", MBR = "", PC = "", IR = "", CAR = "", CBR = "";
 
     //Registradores e seus opcodes
     final static int OPCODES1 = 1, OPCODES2 = 2, OPCODES3 = 3, OPCODES4 = 4;
@@ -104,11 +104,6 @@ public class UC{
                     
                     FuncoesULA.add(memoria.get(enderecoAtual).getConteudo());
                     pulou = false;
-
-                    //Armazena no CAR a primeira linha do ciclo de execução do ADD (linha 18)
-                    CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(18), 12);
-
-                    FuncoesAuxiliares.exibirCicloExecucao(CAR);
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de sub
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0110")){

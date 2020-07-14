@@ -8,6 +8,10 @@ public class Microprograma {
         this.conteudo = conteudo;
     }
 
+    public void setConteudo(String conteudo){
+        this.conteudo = conteudo;
+    }
+
     public String getEndereco(){
         return this.endereco;
     }
