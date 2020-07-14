@@ -206,6 +206,38 @@ public class FuncoesAuxiliares {
                     String portasAlteradas = alterarPortas(UC.microprograma.get(i).getConteudo(), retornaPortaRegistrador(registrador2)[1]);
                     UC.microprograma.get(i).setConteudo(portasAlteradas);
                 }
+            
+            //slt
+            }else if(codigoMaquina.substring(0, 4).equals("1010")){
+                //Registradores
+                String registrador1 = codigoMaquina.substring(4, 7);
+                String registrador2 = codigoMaquina.substring(7, 10);
+                String registrador3 = codigoMaquina.substring(10, 13);
+                
+                //Se há "R1" na porta de entrada
+                if(partesMicroprograma[0].indexOf("R1") != -1){
+                    //Atualiza o microprograma com as portas alteradas
+                    String portasAlteradas = alterarPortas(UC.microprograma.get(i).getConteudo(), retornaPortaRegistrador(registrador1)[0]);
+                    UC.microprograma.get(i).setConteudo(portasAlteradas);
+                }
+                //Se há "R1" na porta de saída
+                if(partesMicroprograma[1].indexOf("R1") != -1){
+                    //Atualiza o microprograma com as portas alteradas
+                    String portasAlteradas = alterarPortas(UC.microprograma.get(i).getConteudo(), retornaPortaRegistrador(registrador1)[1]);
+                    UC.microprograma.get(i).setConteudo(portasAlteradas);
+                }
+                //Se há "R2" na porta de saída
+                if(partesMicroprograma[1].indexOf("R2") != -1){
+                    //Atualiza o microprograma com as portas alteradas
+                    String portasAlteradas = alterarPortas(UC.microprograma.get(i).getConteudo(), retornaPortaRegistrador(registrador2)[1]);
+                    UC.microprograma.get(i).setConteudo(portasAlteradas);
+                }
+                //Se há "R3" na porta de saída
+                if(partesMicroprograma[1].indexOf("R3") != -1){
+                    //Atualiza o microprograma com as portas alteradas
+                    String portasAlteradas = alterarPortas(UC.microprograma.get(i).getConteudo(), retornaPortaRegistrador(registrador3)[1]);
+                    UC.microprograma.get(i).setConteudo(portasAlteradas);
+                }
             }
             
             System.out.println(UC.microprograma.get(i).getConteudo());

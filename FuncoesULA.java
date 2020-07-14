@@ -164,6 +164,10 @@ public class FuncoesULA {
         opcodes[2] = codigoMaquina.substring(7, 10);
         opcodes[3] = codigoMaquina.substring(10, 13);
 
+        //Armazena no CAR a primeira linha do ciclo de execução do SLT (linha 59)
+        UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(59), 12);
+        FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
+
         //pega o valor de cada registrador ou constante passados por parâmetro
         int pam1 = Integer.parseInt(FuncoesAuxiliares.converterRegistrador(opcodes[2]), 2);
         int pam2 = Integer.parseInt(FuncoesAuxiliares.converterRegistrador(opcodes[3]), 2);
