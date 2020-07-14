@@ -205,9 +205,17 @@ public class FuncoesULA {
         //Verifica se o segundo parâmetro é uma constante ou registrador e armazena os bits correspondentes
         if(FuncoesAuxiliares.verificaRegistrador(codigoMaquina.substring(7, 19))){
             opcodes[2] = codigoMaquina.substring(7, 10);
+
+            //Armazena no CAR a primeira linha do ciclo de execução do BEQ registrador com registrador (linha 41)
+            UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(41), 12);
+            FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
         }else{
             opcodes[2] = codigoMaquina.substring(7, 19);
             constante = true;
+
+            //Armazena no CAR a primeira linha do ciclo de execução do BEQ registrador com constante (linha 45)
+            UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(45), 12);
+            FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
         }
         
         if(constante){
@@ -243,9 +251,17 @@ public class FuncoesULA {
         //Verifica se o segundo parâmetro é uma constante ou registrador e armazena os bits correspondentes
         if(FuncoesAuxiliares.verificaRegistrador(codigoMaquina.substring(7, 19))){
             opcodes[2] = codigoMaquina.substring(7, 10);
+
+            //Armazena no CAR a primeira linha do ciclo de execução do BNE registrador com registrador (linha 50)
+            UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(50), 12);
+            FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
         }else{
             opcodes[2] = codigoMaquina.substring(7, 19);
             constante = true;
+
+            //Armazena no CAR a primeira linha do ciclo de execução do BNE registrador com constante (linha 54)
+            UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(54), 12);
+            FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
         }
 
         if(constante){
