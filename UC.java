@@ -31,7 +31,7 @@ public class UC{
         try {
             
             //Recebe o arquivo de entrada
-            inputStream = new BufferedReader(new FileReader("exemplo.txt"));
+            inputStream = new BufferedReader(new FileReader("exemplo_beq.txt"));
             //Cada linha do código MIPS
             String linha;
             //String que receberá o código de montagem linha por linha
@@ -89,7 +89,12 @@ public class UC{
             if(!pulou){
                 enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(i);
             }
-            
+
+            //endereco não encontrado
+            if(enderecoAtual == -1){
+                break;
+            }
+
             //Ignora linhas vazias
             if(!memoria.get(enderecoAtual).getConteudo().equals("")){
 

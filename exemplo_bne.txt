@@ -1,0 +1,7 @@
+.text
+
+li $s1, 5
+li $s2, 6
+bne $s1, $s2, 7
+add $s3, $s1, $s2
+sub $s4, $s1, $s2
