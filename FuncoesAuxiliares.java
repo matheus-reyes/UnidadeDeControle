@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 public class FuncoesAuxiliares {
     
     //Variável que armazena a primeira posição disponível para memória da lista
@@ -21,6 +22,13 @@ public class FuncoesAuxiliares {
     public static void exibirCicloExecucao(String enderecoInicio, String codigoMaquina){
         //Converte o endereço de início para decimal
         int enderecoComeco = Integer.parseInt(enderecoInicio, 2);
+        Scanner entrada = new Scanner(System.in);
+
+        //Percorre o ciclo de busca do Microprograma
+        for(int i = 2; i <= 7; i++){
+            System.out.println(UC.microprograma.get(i).getConteudo());
+            String enter = entrada.nextLine();
+        }
 
         //Percorre o microprograma a partir do endereço de início
         for(int i = enderecoComeco; i < UC.microprograma.size(); i++){
@@ -277,6 +285,7 @@ public class FuncoesAuxiliares {
             System.out.println(UC.microprograma.get(i).getConteudo());
             //Retorna para o valor inicial
             UC.microprograma.get(i).setConteudo(linhaMicroprogramaInicial);
+            String enter = entrada.nextLine();
         }
        
     }
@@ -557,8 +566,6 @@ public class FuncoesAuxiliares {
                 linguagemdeMontagemComEspaco = completarBinarioDireita(linguagemdeMontagemComEspaco, (32 + numeroespacos));
             }
             
-            System.out.println(linguagemdeMontagemComEspaco);
-            System.out.println(linguagemdeMontagem);
             return linguagemdeMontagem;
         }
     

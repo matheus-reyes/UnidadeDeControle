@@ -25,6 +25,8 @@ public class FuncoesULA {
         String valorSobrescreve = FuncoesAuxiliares.converterRegistrador(opcodes[1]);
         //Variável para guardar o endereço+const em binário
         String enderecoBinario = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(enderecoVetor + constante), 12);
+        UC.ULA = enderecoBinario;
+        UC.MBR = enderecoBinario;
         for(int i = 0; i < UC.memoria.size(); i++){
             if((UC.memoria.get(i).getEndereco()).equals(enderecoBinario)){
                 UC.memoria.get(i).setConteudo(valorSobrescreve);
@@ -57,6 +59,8 @@ public class FuncoesULA {
         int constante = Integer.parseInt(opcodes[3], 2);
         //Variável para guardar o endereço+const em binário
         String enderecoBinario = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(enderecoVetor + constante), 12);
+        UC.ULA = enderecoBinario;
+        UC.MBR = enderecoBinario;
         for(int i = 0; i < UC.memoria.size(); i++){
             if((UC.memoria.get(i).getEndereco()).equals(enderecoBinario)){
                 valorVetor = UC.memoria.get(i).getConteudo();
@@ -87,6 +91,8 @@ public class FuncoesULA {
         //Armazena no CAR a primeira linha do ciclo de execução do LA (linha 74)
         UC.CAR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(74), 12);
         FuncoesAuxiliares.exibirCicloExecucao(UC.CAR, codigoMaquina);
+
+        UC.MBR = opcodes[2];
 
         //Compara cada um dos códigos com os registradores, se for igual, atribui o valor da constante ao registrador
         if(opcodes[1].equals("001")){
@@ -185,6 +191,8 @@ public class FuncoesULA {
         int pam1 = Integer.parseInt(FuncoesAuxiliares.converterRegistrador(opcodes[2]), 2);
         int pam2 = Integer.parseInt(FuncoesAuxiliares.converterRegistrador(opcodes[3]), 2);
 
+        UC.ULA = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(pam1 - pam2), 12);
+
         if(pam1 < pam2){
             if(opcodes[1].equals("001")){
                 UC.s1 = "1";
@@ -245,6 +253,8 @@ public class FuncoesULA {
         int pam1 = Integer.parseInt(FuncoesAuxiliares.converterRegistrador(opcodes[1]), 2);
         int pam2 = Integer.parseInt(FuncoesAuxiliares.converterRegistrador(opcodes[2]), 2);
 
+        UC.ULA = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(pam1 - pam2), 12);
+
         //Se os parâmetros forem iguais, retorna a linha informada para realizar o pulo
         if(pam1 == pam2){
             return (Integer.parseInt(opcodes[3], 2) - 1);
@@ -290,6 +300,8 @@ public class FuncoesULA {
         //pega o valor de cada registrador ou constante passados por parâmetro
         int pam1 = Integer.parseInt(FuncoesAuxiliares.converterRegistrador(opcodes[1]), 2);
         int pam2 = Integer.parseInt(FuncoesAuxiliares.converterRegistrador(opcodes[2]), 2);
+
+        UC.ULA = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(pam1 - pam2), 12);
 
         //Se os parâmetros forem diferentes, retorna a linha informada para realizar o pulo
         if(pam1 != pam2){
@@ -339,6 +351,8 @@ public class FuncoesULA {
             UC.s4 = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(soma1 + soma2), 12);
         }
 
+        UC.ULA = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(soma1 + soma2), 12);
+
     }
 
     //Realiza o SUB
@@ -379,6 +393,8 @@ public class FuncoesULA {
         }else if(opcodes[1].equals("100")){
             UC.s4 = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(sub1 - sub2), 12);
         }
+
+        UC.ULA = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(sub1 - sub2), 12);
 
     }
 }

@@ -27,7 +27,7 @@ public class UC{
 
     public static void main(String[] args) throws IOException {
         BufferedReader inputStream = null;
-       
+        Scanner entrada = new Scanner(System.in);
         try {
             
             //Recebe o arquivo de entrada
@@ -85,7 +85,8 @@ public class UC{
         int enderecoAtual = 0;
         // Percorre a lista de memórias
         for(int i = 0; i < 500; i++){
-            
+            System.out.println("Digite Enter para ir à próxima linha");
+            String enter = entrada.nextLine();
             if(!pulou){
                 enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(i);
             }
@@ -94,6 +95,9 @@ public class UC{
             if(enderecoAtual == -1){
                 break;
             }
+
+            IR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(enderecoAtual), 12);
+            MBR = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(enderecoAtual), 12);
 
             //Ignora linhas vazias
             if(!memoria.get(enderecoAtual).getConteudo().equals("")){
@@ -177,13 +181,22 @@ public class UC{
                     pulou = false;
                     
                 }
+
+                PC = FuncoesAuxiliares.completarBinario(Integer.toBinaryString(enderecoAtual + 1), 12);
+
+                System.out.print("S1: " + (!s1.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s1), 2) : s1));
+                System.out.print("   S2: " + (!s2.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s2), 2) : s2));
+                System.out.print("   S3: " + (!s3.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s3), 2) : s3));
+                System.out.println("   S4: " + (!s4.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s4), 2) : s4));
+                System.out.print("ULA: " + (!ULA.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(ULA), 2) : ULA));
+                System.out.print("   MAR: " + (!MAR.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(MAR), 2) : MAR));
+                System.out.print("   MBR: " + (!MBR.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(MBR), 2) : MBR));
+                System.out.print("   IR: " + (!IR.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(IR), 2) : IR));
+                System.out.println("   PC: " + (!PC.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(PC), 2) : PC));
+                System.out.println();
             }
 
         }
-        System.out.println("S1: " + (!s1.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s1), 2) : s1));
-        System.out.println("S2: " + (!s2.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s2), 2) : s2));
-        System.out.println("S3: " + (!s3.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s3), 2) : s3));
-        System.out.println("S4: " + (!s4.equals("") ? Integer.parseInt(FuncoesAuxiliares.converterRegistrador(s4), 2) : s4));
     }
 
 }
