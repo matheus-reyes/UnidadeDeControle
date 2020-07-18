@@ -261,7 +261,7 @@ public class FuncoesULA {
         }
 
         //Se os parâmetros não forem iguais, retorna a mesma posição, não realizando o pulo
-        return posicaoAtual + 1;
+        return posicaoAtual;
         
     } 
 
@@ -309,7 +309,7 @@ public class FuncoesULA {
         }
 
         //Se os parâmetros forem iguais, retorna a mesma posição, não realizando o pulo
-        return posicaoAtual + 1;
+        return posicaoAtual;
     }
 
     //Realiza o ADD
