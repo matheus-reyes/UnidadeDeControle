@@ -31,7 +31,7 @@ public class UC{
         try {
             
             //Recebe o arquivo de entrada
-            inputStream = new BufferedReader(new FileReader("codigoMIPS.txt"));
+            inputStream = new BufferedReader(new FileReader("exemplo_slt_j_move.txt"));
             //Cada linha do código MIPS
             String linha;
             //String que receberá o código de montagem linha por linha
@@ -82,13 +82,13 @@ public class UC{
         FuncoesAuxiliares.lerMicroprograma();
 
         boolean pulou = false;
-        int enderecoAtual = 0;
+        int enderecoAtual = -1;
         // Percorre a lista de memórias
         for(int i = 0; i < 500; i++){
             System.out.println("Digite Enter para ir a proxima linha");
             String enter = entrada.nextLine();
             if(!pulou){
-                enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(i);
+                enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(enderecoAtual + 1);
             }
 
             //endereco não encontrado
