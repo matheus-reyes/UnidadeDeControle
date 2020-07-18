@@ -3,6 +3,6 @@
 li $s1, 3
 move $s2, $s1
 li $s3, 1
-j 6
+j 5
 li $s4, 2
 slt $s3, $s2, $s3
