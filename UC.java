@@ -31,7 +31,7 @@ public class UC{
         try {
             
             //Recebe o arquivo de entrada
-            inputStream = new BufferedReader(new FileReader("exemplo_slt_j_move.txt"));
+            inputStream = new BufferedReader(new FileReader("codigoMIPS.txt"));
             //Cada linha do código MIPS
             String linha;
             //String que receberá o código de montagem linha por linha
@@ -81,17 +81,27 @@ public class UC{
         //Função que lê o microprograma linha a linha e armazena na lista microprograma
         FuncoesAuxiliares.lerMicroprograma();
 
-        boolean pulou = false;
+        boolean inicio = true;
         int enderecoAtual = -1;
         // Percorre a lista de memórias
         for(int i = 0; i < 500; i++){
             System.out.println("Digite Enter para ir a proxima linha");
             String enter = entrada.nextLine();
-            if(!pulou){
+
+            //primeiro loop, encontra a posição inicial na memória
+            if(inicio){
                 enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(enderecoAtual + 1);
+                inicio = false;
+            }else{
+                enderecoAtual = enderecoAtual + 1;
             }
 
-            //endereco não encontrado
+            //se chega até o fim da memória, encerra o loop
+            if(enderecoAtual == memoria.size()){
+                break;
+            }
+
+            //endereco não encontrado, encerra o loop
             if(enderecoAtual == -1){
                 break;
             }
@@ -106,37 +116,31 @@ public class UC{
                 if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0001")){
                     
                     FuncoesULA.li(memoria.get(enderecoAtual).getConteudo());
-                    pulou = false;
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de add
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0101")){
                     
                     FuncoesULA.add(memoria.get(enderecoAtual).getConteudo());
-                    pulou = false;
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de sub
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0110")){
                         
                     FuncoesULA.sub(memoria.get(enderecoAtual).getConteudo());
-                    pulou = false;
         
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de move
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0100")){
                         
                     FuncoesULA.move(memoria.get(enderecoAtual).getConteudo());
-                    pulou = false;
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de jump
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("1001")){
                    
                     enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(FuncoesULA.j(memoria.get(enderecoAtual).getConteudo()));
-                    pulou = true;
 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de slt
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("1010")){
                             
                     FuncoesULA.slt(memoria.get(enderecoAtual).getConteudo());
-                    pulou = false;
                 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de beq
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0111")){
@@ -147,9 +151,7 @@ public class UC{
                     if(enderecoAtual != (enderecoAntigo + 1)){
                         enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(enderecoAtual);
                     }
-
-                    pulou = true;
-                    
+    
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de bne
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("1000")){
                     
@@ -159,26 +161,21 @@ public class UC{
                     if(enderecoAtual != (enderecoAntigo + 1)){
                         enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(enderecoAtual);
                     }
-
-                    pulou = true;
                    
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de la
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("1011")){
                                         
                     FuncoesULA.la(memoria.get(enderecoAtual).getConteudo());
-                    pulou = false;
                 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de lw
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0010")){
                                             
                     FuncoesULA.lw(memoria.get(enderecoAtual).getConteudo());
-                    pulou = false;
                 
                 //Se o código nas 4 primeiras posições for equivalente ao opcode de sw
                 }else if(memoria.get(enderecoAtual).getConteudo().substring(0, 4).equals("0011")){
 
                     FuncoesULA.sw(memoria.get(enderecoAtual).getConteudo());
-                    pulou = false;
                     
                 }
 
