@@ -31,7 +31,7 @@ public class UC{
         try {
             
             //Recebe o arquivo de entrada
-            inputStream = new BufferedReader(new FileReader("exemplo_beq.txt"));
+            inputStream = new BufferedReader(new FileReader("codigoMIPS.txt"));
             //Cada linha do código MIPS
             String linha;
             //String que receberá o código de montagem linha por linha
@@ -85,7 +85,7 @@ public class UC{
         int enderecoAtual = 0;
         // Percorre a lista de memórias
         for(int i = 0; i < 500; i++){
-            System.out.println("Digite Enter para ir à próxima linha");
+            System.out.println("Digite Enter para ir a proxima linha");
             String enter = entrada.nextLine();
             if(!pulou){
                 enderecoAtual = FuncoesAuxiliares.encontrarPosicaoMemoria(i);
